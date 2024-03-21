@@ -44,12 +44,12 @@ const GeneratePassword = () => {
         }
         setPassword(newPassword);
     };
-    const colorPasword = password.length <= 7 ? { color: 'red' } : password.length <= 10 ? { color: "orange" } : { color: 'green' }
+    const colorPasword = password.length <= 7 ? { color: 'red' } : password.length <= 8 ? { color: "orange" } : { color: 'green' }
     // Determine password strength based on length
     const getPasswordStrength = () => {
         if (password.length <= 7) {
             return <FontAwesomeIcon icon={faLockOpen} color="red" />;
-        } else if (password.length <= 10) {
+        } else if (password.length <= 8) {
             return <FontAwesomeIcon icon={faLock} color="orange" />;
         } else {
             return <FontAwesomeIcon icon={faLock} color="green" />;
