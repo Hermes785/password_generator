@@ -57,7 +57,7 @@ const GeneratePassword = () => {
     };
 
     useEffect(() => {
-        getPasswordStrength();
+
     }, [password]);
 
     return (
