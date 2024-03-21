@@ -24,17 +24,7 @@ const GeneratePassword = () => {
         }
     };
 
-    const handleRegeneratePassword = (e) => {
 
-        const password_actual = password;
-        let newPassword = '';
-        for (let i = 0; i < length; i++) {
-            const randomIndex = Math.floor(Math.random() * password_actual.length);
-            newPassword += password_actual[randomIndex];
-        }
-        setPassword(newPassword);
-
-    }
     const colorPasword = password.length <= 6 ? { color: 'red' } : password.length <= 8 ? { color: "orange" } : { color: 'green' }
 
     // Determine password strength based on length
@@ -142,9 +132,7 @@ const GeneratePassword = () => {
                                 </div>
                             </div>
 
-                            <div className="text-center mb-3">
-                                <button className="btn btn-primary" onClick={handleRegeneratePassword}>Regenerate Password</button>
-                            </div>
+
                         </div>
                     </div>
                 </div>
