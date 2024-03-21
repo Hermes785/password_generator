@@ -24,15 +24,27 @@ const GeneratePassword = () => {
         }
     };
 
+    const handleRegeneratePassword = (e) => {
+
+        const password_actual = password;
+        let newPassword = '';
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * password_actual.length);
+            newPassword += password_actual[randomIndex];
+        }
+        setPassword(newPassword);
+
+    }
 
 
-    const colorPasword = password.length <= 6 ? { color: 'red' } : password.length <= 11 ? { color: "orange" } : { color: 'green' }
+
+    const colorPasword = password.length <= 6 ? { color: 'red' } : password.length <= 8 ? { color: "orange" } : { color: 'green' }
 
     // Determine password strength based on length
     const getPasswordStrength = () => {
         if (password.length <= 6) {
             return <FontAwesomeIcon icon={faLockOpen} color="red" />;
-        } else if (password.length <= 11) {
+        } else if (password.length <= 8) {
             return <FontAwesomeIcon icon={faLock} color="orange" />;
         } else {
             return <FontAwesomeIcon icon={faLock} color="green" />;
@@ -45,7 +57,7 @@ const GeneratePassword = () => {
             if (includeLetters) characters += 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
             if (includeDigits) characters += '0123456789';
             if (includeSpecialCharacters) characters += '!@#$%^&*()_+~`|}{[]\\:;?><,./-=';
-            if (characters === '') return; // Exit if no character type selected
+            if (characters === '') return;
 
             let newPassword = '';
             for (let i = 0; i < length; i++) {
@@ -59,10 +71,10 @@ const GeneratePassword = () => {
     }, [length, includeLetters, includeDigits, includeSpecialCharacters]);
 
     return (
-        <div className="container mt-5">
+        <div className="container-fluid mt-5">
             <div className="row justify-content-center">
-                <div className="col-md-12"> {/* Changement de la classe col-md-8 à col-md-12 */}
-                    <div className="card border-primary" style={{ maxWidth: "800px", margin: "0 auto" }}> {/* Ajout de styles CSS pour définir la largeur maximale de la carte et centrer horizontalement */}
+                <div className="col-md-10">
+                    <div className="card border-primary">
                         <div className="card-header bg-primary text-white text-center">
                             <h2>Password Generator</h2>
                         </div>
@@ -74,7 +86,7 @@ const GeneratePassword = () => {
                                     type="range"
                                     id="passwordLength"
                                     min="1"
-                                    max=""
+                                    max="50"
                                     value={length}
                                     onChange={handleChangeLength}
                                     style={{ width: "100%" }}
@@ -83,7 +95,21 @@ const GeneratePassword = () => {
                             </div>
 
                             <div className="form-group">
+                                <label htmlFor="generatedPassword">Generated Password:</label>
+                                <input
+                                    className="form-control"
+                                    type="text"
+                                    id="generatedPassword"
+                                    value={password}
+                                    readOnly
+                                    style={{ ...colorPasword, fontSize: '24px' }} // Changement de la taille de police
+                                />
+                            </div>
+                            <div className="text-center mb-3">
+                                <span>Password Strength: {getPasswordStrength()}</span>
+                            </div>
 
+                            <div className="form-group">
                                 <div className="form-check form-check-inline">
                                     <input
                                         className="form-check-input"
@@ -115,28 +141,19 @@ const GeneratePassword = () => {
                                         checked={includeSpecialCharacters}
                                         onChange={handleCheckboxChange}
                                     />
-                                    <label className="form-check-label" htmlFor="includeSpecialCharacters">Special Characters (!@#$%^&()?";\|")</label> {/* Correction de la balise de fermeture */}
+                                    <label className="form-check-label" htmlFor="includeSpecialCharacters">Special Characters (!@#$%^&()?";\|")</label>
                                 </div>
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="generatedPassword">Generated Password:</label>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    id="generatedPassword"
-                                    value={password}
-                                    readOnly
-                                    style={colorPasword}
-                                />
-                            </div>
+
                             <div className="text-center mb-3">
-                                <span>Password Strength: {getPasswordStrength()}</span>
+                                <button className="btn btn-primary" onClick={handleRegeneratePassword}>Regenerate Password</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
 
     );
 };
