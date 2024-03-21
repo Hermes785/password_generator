@@ -28,6 +28,12 @@ const GeneratePassword = () => {
         generatePassword(characters);
     };
 
+    // Function to generate a random password with only Letters and  digits
+    const generateRandomPasswordWithOnlyLettersAndDigits = () => {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        generatePassword(characters);
+    };
+
     // Function to generate password based on provided characters
     const generatePassword = (characters) => {
         const passwordLength = length;
@@ -38,12 +44,12 @@ const GeneratePassword = () => {
         }
         setPassword(newPassword);
     };
-    const colorPasword = password.length <= 9 ? { color: 'red' } : password.length <= 10 ? { color: "orange" } : { color: 'green' }
+    const colorPasword = password.length <= 7 ? { color: 'red' } : password.length <= 10 ? { color: "orange" } : { color: 'green' }
     // Determine password strength based on length
     const getPasswordStrength = () => {
-        if (password.length <= 6) {
+        if (password.length <= 7) {
             return <FontAwesomeIcon icon={faLockOpen} color="red" />;
-        } else if (password.length <= 7) {
+        } else if (password.length <= 10) {
             return <FontAwesomeIcon icon={faLock} color="orange" />;
         } else {
             return <FontAwesomeIcon icon={faLock} color="green" />;
@@ -88,8 +94,13 @@ const GeneratePassword = () => {
                             <div className="text-center mb-3">
                                 <span>Password Strength: {getPasswordStrength()}</span>
                             </div>
-                            <button className="btn btn-primary btn-block mb-2" onClick={generateRandomPasswordWithAll}>
-                                Generate with all characters
+                            <div className="text-center mb-2">
+                                <button className="btn btn-primary btn-block mb-3" onClick={generateRandomPasswordWithAll}>
+                                    Generate with all characters
+                                </button>
+                            </div>
+                            <button className="btn btn-primary btn-block mb-2" onClick={generateRandomPasswordWithOnlyLettersAndDigits}>
+                                Generate with digits and letters
                             </button>
                             <div className="mb-2"></div>
                             <button className="btn btn-primary btn-block mb-2" onClick={generateRandomPasswordWithOnlyLetters}>
