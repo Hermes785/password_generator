@@ -4,7 +4,7 @@ import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 
 const GeneratePassword = () => {
     const [password, setPassword] = useState('');
-    const [length, setLength] = useState('');
+    const [length, setLength] = useState(0);
     const [includeLetters, setIncludeLetters] = useState(false);
     const [includeDigits, setIncludeDigits] = useState(false);
     const [includeSpecialCharacters, setIncludeSpecialCharacters] = useState(false);
@@ -35,9 +35,6 @@ const GeneratePassword = () => {
         setPassword(newPassword);
 
     }
-
-
-
     const colorPasword = password.length <= 6 ? { color: 'red' } : password.length <= 8 ? { color: "orange" } : { color: 'green' }
 
     // Determine password strength based on length
