@@ -9,7 +9,7 @@ const AppRouter = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/generate" element={<GeneratePassword />} />
+                <Route path="/" element={<GeneratePassword />} />
             </Routes>
         </BrowserRouter>
     )
