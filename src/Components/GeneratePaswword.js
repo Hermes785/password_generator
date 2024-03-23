@@ -36,13 +36,13 @@ const GeneratePassword = () => {
             setErrorMessage("Password is empty");
             setTimeout(function () {
                 setErrorMessage('');
-            }, 5000);
+            }, 3000);
         } else {
             copy(password)
             setSuccesMessage(`successful copy `);
             setTimeout(function () {
                 setSuccesMessage('');
-            }, 5000);
+            }, 3000);
 
         }
 
