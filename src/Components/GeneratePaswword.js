@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
+import copy from "copy-to-clipboard";
 
 const GeneratePassword = () => {
     const [password, setPassword] = useState('');
@@ -8,10 +9,20 @@ const GeneratePassword = () => {
     const [includeLetters, setIncludeLetters] = useState(false);
     const [includeDigits, setIncludeDigits] = useState(false);
     const [includeSpecialCharacters, setIncludeSpecialCharacters] = useState(false);
+    const [copytexte, setCopytexte] = useState('');
+    const [successMessage, setSuccesMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
+
 
     const handleChangeLength = (e) => {
         setLength(e.target.value);
+        console.log(copytexte)
     };
+
+    const handleChangeCopytexte = (e) => {
+        setCopytexte(e.target.value);
+
+    }
 
     const handleCheckboxChange = (e) => {
         const { name, checked } = e.target;
@@ -24,11 +35,26 @@ const GeneratePassword = () => {
         }
     };
 
+    const copyPassWord = () => {
+
+        if (password.length === 0) {
+            setErrorMessage("Password is empty");
+        } else {
+            copy(password)
+            setSuccesMessage(`successful copy `);
+            setErrorMessage("");
+
+        }
+
+
+    }
+
 
     const colorPasword = password.length <= 6 ? { color: 'red' } : password.length <= 8 ? { color: "orange" } : { color: 'green' }
 
     // Determine password strength based on length
     const getPasswordStrength = () => {
+        if (password.length === 0) return
         if (password.length <= 6) {
             return <FontAwesomeIcon icon={faLockOpen} color="red" />;
         } else if (password.length <= 8) {
@@ -37,28 +63,32 @@ const GeneratePassword = () => {
             return <FontAwesomeIcon icon={faLock} color="green" />;
         }
     };
+    const generateRandomPassword = useCallback(() => {
+        let characters = '';
+        if (includeLetters) characters += 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        if (includeDigits) characters += '0123456789';
+        if (includeSpecialCharacters) characters += '!@#$%^&*()_+~`|}{[]\\:;?><,./-=';
+        if (characters === '') return;
+
+        let newPassword = '';
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            newPassword += characters[randomIndex];
+        }
+        setPassword(newPassword);
+    }, [length, includeLetters, includeDigits, includeSpecialCharacters]);
 
     useEffect(() => {
-        const generateRandomPassword = () => {
-            let characters = '';
-            if (includeLetters) characters += 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-            if (includeDigits) characters += '0123456789';
-            if (includeSpecialCharacters) characters += '!@#$%^&*()_+~`|}{[]\\:;?><,./-=';
-            if (characters === '') return;
-
-            let newPassword = '';
-            for (let i = 0; i < length; i++) {
-                const randomIndex = Math.floor(Math.random() * characters.length);
-                newPassword += characters[randomIndex];
-            }
-            setPassword(newPassword);
-        };
         generateRandomPassword();
-
-    }, [length, includeLetters, includeDigits, includeSpecialCharacters]);
+    }, [generateRandomPassword]);
 
     return (
         <div className="container-fluid mt-5">
+
+            {errorMessage && <h2 className="text-danger">{errorMessage}</h2>}
+            {successMessage && <h2 className="text-success">{successMessage}</h2>}
+
+
             <div className="row justify-content-center">
                 <div className="col-md-10">
                     <div className="card border-primary">
@@ -132,6 +162,15 @@ const GeneratePassword = () => {
                                 </div>
                             </div>
 
+                            <div className="text-center mb-3">
+                                <button className="btn btn-primary" onClick={generateRandomPassword}>Regenerate Password</button>
+
+                            </div>
+                            <div className="text-center mb-3">
+                                <button onChange={handleChangeCopytexte} onClick={copyPassWord} id="copyButton" className="btn btn-primary">
+                                    copy password
+                                </button>
+                            </div>
 
                         </div>
                     </div>
