@@ -9,20 +9,15 @@ const GeneratePassword = () => {
     const [includeLetters, setIncludeLetters] = useState(false);
     const [includeDigits, setIncludeDigits] = useState(false);
     const [includeSpecialCharacters, setIncludeSpecialCharacters] = useState(false);
-    const [copytexte, setCopytexte] = useState('');
     const [successMessage, setSuccesMessage] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
 
 
     const handleChangeLength = (e) => {
         setLength(e.target.value);
-        console.log(copytexte)
+
     };
 
-    const handleChangeCopytexte = (e) => {
-        setCopytexte(e.target.value);
-
-    }
 
     const handleCheckboxChange = (e) => {
         const { name, checked } = e.target;
@@ -39,13 +34,17 @@ const GeneratePassword = () => {
 
         if (password.length === 0) {
             setErrorMessage("Password is empty");
+            setTimeout(function () {
+                setErrorMessage('');
+            }, 5000);
         } else {
             copy(password)
             setSuccesMessage(`successful copy `);
-            setErrorMessage("");
+            setTimeout(function () {
+                setSuccesMessage('');
+            }, 5000);
 
         }
-
 
     }
 
@@ -84,6 +83,8 @@ const GeneratePassword = () => {
 
     return (
         <div className="container-fluid mt-5">
+
+
 
             {errorMessage && <h2 className="text-danger">{errorMessage}</h2>}
             {successMessage && <h2 className="text-success">{successMessage}</h2>}
@@ -167,7 +168,7 @@ const GeneratePassword = () => {
 
                             </div>
                             <div className="text-center mb-3">
-                                <button onChange={handleChangeCopytexte} onClick={copyPassWord} id="copyButton" className="btn btn-primary">
+                                <button onClick={copyPassWord} id="copyButton" className="btn btn-primary">
                                     copy password
                                 </button>
                             </div>
