@@ -86,8 +86,8 @@ const GeneratePassword = () => {
 
 
 
-            {errorMessage && <h2 className="text-danger">{errorMessage}</h2>}
-            {successMessage && <h2 className="text-success">{successMessage}</h2>}
+            {errorMessage && <h6 className="text-danger">{errorMessage}</h6>}
+            {successMessage && <h6 className="text-success">{successMessage}</h6>}
 
 
             <div className="row justify-content-center">
