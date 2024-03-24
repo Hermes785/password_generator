@@ -83,13 +83,8 @@ const GeneratePassword = () => {
 
     return (
         <div className="container-fluid mt-5">
-
-
-
             {errorMessage && <h6 className="text-danger">{errorMessage}</h6>}
             {successMessage && <h6 className="text-success">{successMessage}</h6>}
-
-
             <div className="row justify-content-center">
                 <div className="col-md-10">
                     <div className="card border-primary">
@@ -103,7 +98,7 @@ const GeneratePassword = () => {
                                     className="form-control-range"
                                     type="range"
                                     id="passwordLength"
-                                    min="1"
+                                    min="0"
                                     max="50"
                                     value={length}
                                     onChange={handleChangeLength}
