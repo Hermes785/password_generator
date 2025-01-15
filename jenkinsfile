@@ -1,0 +1,93 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs 'NodeJS'
+    }
+
+    environment {
+        APP_NAME = "password-genarare_img"
+        DOCKER_IMAGE = "${APP_NAME}:${env.BUILD_ID}"
+        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
+    }
+
+    stages {
+
+
+  stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Build Application') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        stage('Build and Push Docker Image') {
+            when {
+                expression { env.BRANCH_NAME == 'main' }
+            }
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
+                        def fullImageName = "docker.io/hermesn/password-genarare:${env.BUILD_ID}"
+                        echo "Building Docker image ${fullImageName}"
+                        sh "docker build -t ${DOCKER_IMAGE} ."
+                        sh "docker tag ${DOCKER_IMAGE} ${fullImageName}"
+                        sh "docker tag ${DOCKER_IMAGE} docker.io/hermesn/password-genarare:latest"
+                        sh "docker push ${fullImageName}"
+                        sh "docker push docker.io/hermesn/password-genarare:latest"
+
+                        echo "Docker image pushed successfully!"
+                    }
+                }
+            }
+        }
+
+        stage('Approval for Production Deployment') {
+            when {
+                expression { env.BRANCH_NAME == 'main' }
+            }
+            steps {
+                input message: 'Approve deployment to production?', ok: 'Deploy'
+            }
+        }
+
+        stage('Deploy to Production') {
+            when {
+                expression { env.BRANCH_NAME == 'main' }
+            }
+            steps {
+                script {
+                    sh '''
+                        docker stop the_tip_top_front_prod || true
+                        docker rm the_tip_top_front_prod || true
+                        docker-compose -f docker-compose-prod.yml pull
+                        docker-compose -f docker-compose-prod.yml up -d --build
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Post-pipeline actions running...'
+        }
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check logs for details.'
+        }
+    }
+}
