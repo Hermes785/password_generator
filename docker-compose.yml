@@ -9,11 +9,11 @@ services:
     environment:
       NODE_ENV: production
     labels:
-      traefik.enable: "true"
-      traefik.http.routers.password-generator.rule: "Host(`password-generator.mia-services.fr`)"
-      traefik.http.routers.password-generator.entrypoints: websecure
-      traefik.http.routers.password-generator.tls.certresolver: myresolver
-      traefik.http.services.password-generator.loadbalancer.server.port: 3000
+      - "traefik.enable=true"
+      - "traefik.http.routers.password-generator.rule=Host(`password-generator.mia-services.fr`)"
+      - "traefik.http.routers.password-generator.entrypoints=websecure"
+      - "traefik.http.routers.password-generator.tls.certresolver=myresolver"
+      - "traefik.http.services.password-generator.loadbalancer.server.port=3000"
     networks:
       - my_network
     command: ["npm", "start"]
