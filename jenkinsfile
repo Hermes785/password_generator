@@ -69,10 +69,10 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        docker stop the_tip_top_front_prod || true
-                        docker rm the_tip_top_front_prod || true
-                        docker-compose -f docker-compose-prod.yml pull
-                        docker-compose -f docker-compose-prod.yml up -d --build
+                        docker stop password-generator_container || true
+                        docker rm password-generator_container || true
+                        docker-compose -f docker-compose.yml pull
+                        docker-compose -f docker-compose.yml up -d --build
                     '''
                 }
             }
