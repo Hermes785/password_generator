@@ -16,7 +16,6 @@ services:
       - "traefik.http.services.password-generator.loadbalancer.server.port=3000"
     networks:
       - my_network
-    command: ["npm", "start"]
 
 networks:
   my_network:
