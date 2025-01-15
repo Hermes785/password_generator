@@ -1,30 +1,23 @@
-# Étape 1 : Construction de l'application
-FROM node:18-alpine AS builder
-
-# Définir le répertoire de travail
+FROM node:18-alpine AS build
 WORKDIR /app
 
-# Copier les fichiers nécessaires pour installer les dépendances
-COPY package.json ./
+# Leverage caching by installing dependencies first
+COPY package.json package-lock.json ./
+RUN npm install --frozen-lockfile
 
-# Installer les dépendances
-RUN npm install
+# Copy the rest of the application code and build for production
+COPY . ./
+RUN npm run build
 
-# Copier le reste du code source dans le conteneur
-COPY . .
+# Expose port for the development server
+EXPOSE 3000
+CMD ["npm", "start"]
 
-# Construire l'application pour la production
-RUN npmW build
+FROM nginx:alpine AS production
 
-# Étape 2 : Image finale pour exécuter l'application
-FROM node:18-alpine AS runner
+# Copy the production build artifacts from the build stage
+COPY --from=build /app/build /usr/share/nginx/html
 
-# Définir le répertoire de travail
-WORKDIR /app
-
-# Copier uniquement les fichiers nécessaires depuis l'étape de construction
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./
-
-
+# Expose the default NGINX port
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
