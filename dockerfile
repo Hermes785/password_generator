@@ -22,9 +22,5 @@ FROM nginx:stable-alpine
 # Copier les fichiers de construction depuis la première étape
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Copier le fichier de configuration Nginx (facultatif, selon vos besoins)
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 
-# Commande pour démarrer Nginx
-CMD ["nginx", "-g", "daemon off;"]
