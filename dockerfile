@@ -1,4 +1,4 @@
-# Étape 1 : Construction de l'application
+#  Étape 1 : Construction de l'application
 FROM node:18-alpine AS build
 
 # Définir le répertoire de travail
