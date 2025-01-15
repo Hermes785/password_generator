@@ -1,11 +1,11 @@
-version: "3.8" # Utiliser une version plus récente de la spécification Docker Compose
+version: "3.8" 
 services:
   password-generator:
     container_name: password-generator_container
     image: hermesn/password-genarare:latest
     restart: always
     ports:
-      - "3000:3000"
+      - "3000:3010"
     environment:
       NODE_ENV: production
     labels:
