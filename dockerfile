@@ -1,26 +1,30 @@
-#  Étape 1 : Construction de l'application
-FROM node:18-alpine AS build
+# Étape 1 : Construction de l'application
+FROM node:18-alpine AS builder
 
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Copier les fichiers package.json et package-lock.json
-COPY package*.json ./
+# Copier les fichiers nécessaires pour installer les dépendances
+COPY package.json ./
 
-#  Installer les dépendances
+# Installer les dépendances
 RUN npm install
 
-# Copier le reste des fichiers du projet
+# Copier le reste du code source dans le conteneur
 COPY . .
 
 # Construire l'application pour la production
-RUN npm run build
+RUN npmW build
 
-# Étape 2 : Création d'une image de production
-FROM nginx:stable-alpine
+# Étape 2 : Image finale pour exécuter l'application
+FROM node:18-alpine AS runner
 
-# Copier les fichiers de construction depuis la première étape
-COPY --from=build /app/build /usr/share/nginx/html
+# Définir le répertoire de travail
+WORKDIR /app
 
+# Copier uniquement les fichiers nécessaires depuis l'étape de construction
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
 
 
