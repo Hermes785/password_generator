@@ -4,8 +4,6 @@ import GeneratePassword from "././Components/GeneratePaswword";
 
 
 const AppRouter = () => {
-
-
     return (
         <BrowserRouter>
             <Routes>

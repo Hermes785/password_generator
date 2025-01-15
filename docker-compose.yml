@@ -1,0 +1,23 @@
+version: "3.8" # Utiliser une version plus récente de la spécification Docker Compose
+services:
+  password-generator:
+    container_name: password-generator_container
+    image: hermesn/password-genarare:latest
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.password-generator.rule: "Host(`password-generator.mia-services.fr`)"
+      traefik.http.routers.password-generator.entrypoints: websecure
+      traefik.http.routers.password-generator.tls.certresolver: myresolver
+      traefik.http.services.password-generator.loadbalancer.server.port: 3000
+    networks:
+      - my_network
+    command: ["npm", "start"]
+
+networks:
+  my_network:
+    external: true
