@@ -9,9 +9,6 @@ RUN npm install --frozen-lockfile
 COPY . ./
 RUN npm run build
 
-# Expose port for the development server
-EXPOSE 3000
-CMD ["npm", "start"]
 
 FROM nginx:alpine AS production
 

@@ -5,7 +5,7 @@ services:
     image: hermesn/password-genarare:latest
     restart: always
     ports:
-      - "3010:3000"
+      - "3010:80"
     environment:
       NODE_ENV: production
     labels:
@@ -13,7 +13,7 @@ services:
       - "traefik.http.routers.password-generator.rule=Host(`password-generator.mia-services.fr`)"
       - "traefik.http.routers.password-generator.entrypoints=websecure"
       - "traefik.http.routers.password-generator.tls.certresolver=myresolver"
-      - "traefik.http.services.password-generator.loadbalancer.server.port=3000"
+      - "traefik.http.services.password-generator.loadbalancer.server.port=80"
     networks:
       - my_network
 
