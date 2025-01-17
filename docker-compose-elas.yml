@@ -16,6 +16,12 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.elasticsearch.rule=Host(elasticsearch.mia-services.fr)"
+      - "traefik.http.routers.elasticsearch.entrypoints=websecure"
+      - "traefik.http.routers.elasticsearch.tls.certresolver=myresolver"
+      - "traefik.http.services.elasticsearch.loadbalancer.server.port=9200"
     networks:
       - my_network
 
