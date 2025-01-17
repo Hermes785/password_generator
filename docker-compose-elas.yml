@@ -1,12 +1,12 @@
-version: "3.8"
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.10.0
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=false # Désactive la sécurité pour simplifier l'accès
+      - xpack.security.enabled=false
       - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms4g -Xmx4g # Régle la mémoire Java allouée à Elasticsearch (par exemple 4 Go)
     ulimits:
       memlock:
         soft: -1
@@ -16,19 +16,5 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.elasticsearch.rule=Host(`elasticsearch.mia-services.fr`)"
-      - "traefik.http.routers.elasticsearch.entrypoints=websecure"
-      - "traefik.http.routers.elasticsearch.tls.certresolver=myresolver"
-      - "traefik.http.services.elasticsearch.loadbalancer.server.port=9200"
     networks:
       - my_network
-
-volumes:
-  es_data:
-    driver: local
-
-networks:
-  my_network:
-    external: true
