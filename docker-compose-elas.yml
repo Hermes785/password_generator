@@ -25,6 +25,10 @@ services:
     networks:
       - my_network
 
+volumes:
+  es_data:
+    driver: local
+
 networks:
   my_network:
     external: true
