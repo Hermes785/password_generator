@@ -18,3 +18,11 @@ services:
       - "9300:9300"
     networks:
       - my_network
+
+volumes:
+  es_data:
+    driver: local
+
+networks:
+  my_network:
+    external: true
